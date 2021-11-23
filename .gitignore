@@ -1,0 +1,6 @@
+dea/
+__pycache__/
+*.py[cod]
+venv/
+env/
+local_settings.py
