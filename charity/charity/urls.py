@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-import charity_app.views as char_views
+import donations.views as char_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
