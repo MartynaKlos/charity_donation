@@ -1,10 +1,10 @@
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, login, logout
 from django.shortcuts import render
 from django.views import View
-from django.views.generic import FormView, TemplateView
+from django.views.generic import FormView, TemplateView, RedirectView
 from django.urls import reverse_lazy
 
-from .forms import RegisterForm
+from .forms import RegisterForm, LoginForm
 from .models import Donation, Institution
 
 User = get_user_model()
@@ -29,9 +29,22 @@ class AddDonation(View):
 
 
 class Login(FormView):
+    template_name = 'login.html'
+    form_class = LoginForm
+    success_url = reverse_lazy('landing-page')
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        login(self.request, form.user)
+        return response
+
+
+class Logout(RedirectView):
+    url = reverse_lazy('landing-page')
 
     def get(self, request, *args, **kwargs):
-        return render(request, 'login.html')
+        logout(request)
+        return super().get(request, *args, **kwargs)
 
 
 class Register(FormView):
@@ -46,5 +59,6 @@ class Register(FormView):
                                  first_name=cd['first_name'],
                                  last_name=cd['last_name'])
         return super().form_valid(form)
+
 
 
