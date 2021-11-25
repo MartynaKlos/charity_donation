@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'donations',
+    'donations_app',
 ]
 
 MIDDLEWARE = [
@@ -121,4 +121,4 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'donations.User'
+AUTH_USER_MODEL = 'donations_app.User'
