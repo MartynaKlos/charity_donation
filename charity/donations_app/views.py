@@ -1,11 +1,11 @@
 from django.contrib.auth import get_user_model, login, logout
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic import FormView, TemplateView, RedirectView
 from django.urls import reverse_lazy
 
-from .forms import RegisterForm, LoginForm
-from .models import Donation, Institution
+from .forms import RegisterForm, LoginForm, DonationForm
+from .models import Donation, Institution, Category
 
 User = get_user_model()
 
@@ -23,9 +23,17 @@ class LandingPage(TemplateView):
         return context
 
 
-class AddDonation(View):
+class AddDonation(FormView):
+    template_name = 'form.html'
+    form_class = DonationForm
+    success_url = 'landing-page'
+
     def get(self, request, *args, **kwargs):
-        return render(request, 'form.html')
+        if self.request.user.is_authenticated:
+            context = {'form': self.form_class}
+            return render(request, 'form.html', context)
+        else:
+            return redirect('login')
 
 
 class Login(FormView):
@@ -34,9 +42,14 @@ class Login(FormView):
     success_url = reverse_lazy('landing-page')
 
     def form_valid(self, form):
-        response = super().form_valid(form)
-        login(self.request, form.user)
-        return response
+        cd = form.cleaned_data
+        if User.objects.filter(email=cd['email']).count() == 1:
+            response = super().form_valid(form)
+            user = User.objects.get(email=cd['email'])
+            login(self.request, user)
+            return response
+        else:
+            return redirect('register')
 
 
 class Logout(RedirectView):

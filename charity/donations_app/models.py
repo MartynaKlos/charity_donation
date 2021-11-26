@@ -50,12 +50,18 @@ class User(AbstractUser):
 class Category(models.Model):
     name = models.CharField(max_length=64)
 
+    def __str__(self):
+        return self.name
+
 
 class Institution(models.Model):
     name = models.CharField(max_length=120)
     description = models.TextField()
     type = models.IntegerField(choices=TYPE, default=1)
     category = models.ManyToManyField(Category)
+
+    def __str__(self):
+        return f'{self.type} "{self.name}"'
 
 
 class Donation(models.Model):
@@ -70,3 +76,4 @@ class Donation(models.Model):
     pick_up_time = models.TimeField()
     pick_up_comment = models.TextField()
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE)
+

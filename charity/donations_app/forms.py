@@ -2,6 +2,9 @@ from django import forms
 from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
 from django.forms import widgets
+from django.forms.models import ModelMultipleChoiceField
+
+from .models import Category, Institution
 
 
 class RegisterForm(forms.Form):
@@ -16,10 +19,16 @@ class LoginForm(forms.Form):
     email = forms.EmailField(widget=widgets.EmailInput(attrs={'placeholder': 'Email'}))
     password = forms.CharField(widget=widgets.PasswordInput(attrs={'placeholder': 'Hasło'}))
 
-    def clean(self):
-        cd = super().clean()
-        email = cd['email']
-        password = cd['password']
-        self.user = authenticate(email=email, password=password)
-        if self.user is None:
-            raise ValidationError('Niepoprawny email lub hasło!')
+
+class DonationForm(forms.Form):
+    categories = forms.ModelMultipleChoiceField(Category.objects.all(), widget=widgets.CheckboxSelectMultiple())
+    quantity = forms.IntegerField()
+    institution = forms.ModelChoiceField(Institution.objects.all(), widget=widgets.CheckboxInput())
+    address = forms.CharField()
+    phone_number = forms.IntegerField()
+    city = forms.CharField(max_length=120)
+    zip_code = forms.CharField()
+    pick_up_date = forms.DateField()
+    pick_up_time = forms.TimeField()
+    pick_up_comment = forms.Textarea()
+
