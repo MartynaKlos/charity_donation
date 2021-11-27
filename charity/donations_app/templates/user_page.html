@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block header %}{% endblock %}
+
+{% block instruction %}{% endblock %}
+
+{% block content %}
+    <section id="help" class="help">
+      <h2>Twój profil</h2>
+        <br>
+    <div>
+        <p style="font-size: x-large">Imię: {{ user.first_name }}</p>
+        <p style="font-size: x-large">Nazwisko: {{ user.last_name }}</p>
+        <p style="font-size: x-large">Email: {{ user.email }}</p>
+    </div>
+    </section>
+{% endblock %}

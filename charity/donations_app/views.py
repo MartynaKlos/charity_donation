@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model, login, logout
 from django.shortcuts import render, redirect
 from django.views import View
-from django.views.generic import FormView, TemplateView, RedirectView
+from django.views.generic import FormView, TemplateView, RedirectView, DetailView
 from django.urls import reverse_lazy
 
 from .forms import RegisterForm, LoginForm, DonationForm
@@ -74,4 +74,13 @@ class Register(FormView):
         return super().form_valid(form)
 
 
+class UserPage(DetailView):
+    template_name = 'user_page.html'
+    model = User
+    pk_url_kwarg = 'user_pk'
 
+    def get(self, request, *args, **kwargs):
+        if not self.request.user.pk == kwargs['user_pk'] or not self.request.user.is_authenticated:
+            return redirect('login')
+        else:
+            return super().get(request, *args, **kwargs)
