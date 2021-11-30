@@ -22,6 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
     path('', char_views.LandingPage.as_view(), name='landing-page'),
     path('add-donation/', char_views.AddDonation.as_view(), name='add-donation'),
+    path('confirmation/', char_views.ConfirmationPage.as_view(), name='confirmation-page'),
     path('login/', char_views.Login.as_view(), name='login'),
     path('logout/', char_views.Logout.as_view(), name='logout'),
     path('register/', char_views.Register.as_view(), name='register'),

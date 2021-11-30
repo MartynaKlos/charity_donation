@@ -237,6 +237,21 @@ document.addEventListener("DOMContentLoaded", function() {
       let summary = this.$form.querySelector("form").querySelector(".summary").querySelector("ul");
       let address = this.$form.querySelector("form").querySelector(".summary").querySelector(".form-section--columns").querySelector("ul").children;
       let date = this.$form.querySelector("form").querySelector(".summary").querySelector(".form-section--columns").children[1].children[1];
+      let institution = ''
+
+      const institutions = document.getElementById("id_institution").children;
+      const findInstitution = function () {
+        institutions.forEach(function (li) {
+          if (li.querySelector('input').checked) {
+            institution = li.querySelector('input').value;
+            return institution;
+          }
+        })
+      };
+
+      findInstitution();
+
+
       let quantity = document.getElementById("id_quantity").value;
       let street = document.getElementById("id_address").value;
       let zip_code = document.getElementById("id_zip_code").value;
@@ -247,7 +262,7 @@ document.addEventListener("DOMContentLoaded", function() {
       let pick_up_comment = document.getElementById("id_pick_up_comment").value;
 
       summary.firstElementChild.querySelector('.summary--text').innerText = quantity + ' x worek';
-      summary.children[1].querySelector('.summary--text').innerText = 'fundacja';
+      summary.children[1].querySelector('.summary--text').innerText = institution;
       address[0].innerText = street;
       address[1].innerText = city;
       address[2].innerText = zip_code;
@@ -267,8 +282,22 @@ document.addEventListener("DOMContentLoaded", function() {
       e.preventDefault();
       this.currentStep++;
       this.updateForm();
+
+      return fetch(
+        'http://localhost:8080' + '/confirmation',
+        {
+            headers: {'Content-Type': 'application/json' },
+            body: JSON.stringify(this.$form.formData),
+            method: 'POST'
+        }
+    ).then(
+        function(resp) {
+
+            return resp.json();
+        }
+    )
+}
     }
-  }
   const form = document.querySelector(".form--steps");
   if (form !== null) {
     new FormSteps(form);

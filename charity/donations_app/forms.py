@@ -36,7 +36,7 @@ class LoginForm(forms.Form):
 class DonationForm(forms.Form):
     categories = forms.ModelMultipleChoiceField(Category.objects.all(), widget=widgets.CheckboxSelectMultiple())
     quantity = forms.IntegerField()
-    institution = forms.ModelChoiceField(Institution.objects.all())
+    institution = forms.ModelChoiceField(Institution.objects.all(), widget=widgets.RadioSelect())
     address = forms.CharField()
     phone_number = forms.IntegerField()
     city = forms.CharField(max_length=120)

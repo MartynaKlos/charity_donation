@@ -89,9 +89,7 @@
           <!-- STEP 4 -->
           <div data-step="3">
             <h3>Wybierz organizacje, której chcesz pomóc:</h3>
-              {% for field in form.fields.institution.choices %}
-                {{ field.0 }} {{ field.1 }}
-              {% endfor %}
+              {{ form.institution }}
             <div class="form-group form-group--buttons">
               <button type="button" class="btn prev-step">Wstecz</button>
               <button type="button" class="btn next-step">Dalej</button>

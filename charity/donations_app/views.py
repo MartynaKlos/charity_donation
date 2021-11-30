@@ -1,3 +1,5 @@
+import json
+
 from django.contrib.auth import get_user_model, login, logout
 from django.shortcuts import render, redirect
 from django.views.generic import FormView, TemplateView, RedirectView, DetailView
@@ -25,14 +27,22 @@ class LandingPage(TemplateView):
 class AddDonation(FormView):
     template_name = 'form.html'
     form_class = DonationForm
-    success_url = 'landing-page'
+    success_url = reverse_lazy('confirmation-page')
 
     def get(self, request, *args, **kwargs):
         if self.request.user.is_authenticated:
             context = {'form': self.form_class}
-            return render(request, 'form.html', context)
+            return render(request, self.template_name, context)
         else:
             return redirect('login')
+
+
+class ConfirmationPage(TemplateView):
+    template_name = 'form-confirmation.html'
+
+    def get(self, request, *args, **kwargs):
+        form_data = json.loads(request.body.decode("utf-8"))
+        return render(request, self.template_name, {'form_data': form_data})
 
 
 class Login(FormView):
@@ -83,3 +93,8 @@ class UserPage(DetailView):
             return redirect('login')
         else:
             return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['donations'] = Donation.objects.all().filter(user=self.request.user.pk)
+        return context

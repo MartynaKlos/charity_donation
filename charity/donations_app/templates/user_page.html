@@ -15,4 +15,21 @@
         <p style="font-size: x-large">Email: {{ user.email }}</p>
     </div>
     </section>
+    <br><br>
+    <section id="help" class="help">
+      <h2>Twoje darowizny</h2>
+        <br>
+        <ol style="font-size: x-large">
+        {% for donation in donations %}
+            <li>
+                <p style="font-size: x-large">Organizacja: {{ donation.institution.name }}</p>
+                <p style="font-size: x-large">Liczba worków: {{ donation.quantity }}</p>
+                <p style="font-size: x-large">Dary: {% for category in donation.categories.all %}{{ category.name }}{% if forloop.last %}{% else %}, {% endif %}{% endfor %}</p>
+                <p style="font-size: x-large">Odbiór: {{ donation.pick_up_date }} {{ donation.pick_up_time }}</p>
+            </li>
+        {% empty %}
+            <p style="font-size: x-large">Nie przekazałeś jeszcze żadnej darowizny.</p>
+        {% endfor %}
+        </ol>
+    </section>
 {% endblock %}
