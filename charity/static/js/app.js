@@ -234,42 +234,46 @@ document.addEventListener("DOMContentLoaded", function() {
       this.$stepInstructions[0].parentElement.parentElement.hidden = this.currentStep >= 6;
       this.$step.parentElement.hidden = this.currentStep >= 6;
 
-      let summary = this.$form.querySelector("form").querySelector(".summary").querySelector("ul");
-      let address = this.$form.querySelector("form").querySelector(".summary").querySelector(".form-section--columns").querySelector("ul").children;
-      let date = this.$form.querySelector("form").querySelector(".summary").querySelector(".form-section--columns").children[1].children[1];
-      let institution = ''
 
-      const institutions = document.getElementById("id_institution").children;
-      const findInstitution = function () {
-        institutions.forEach(function (li) {
-          if (li.querySelector('input').checked) {
-            institution = li.querySelector('input').value;
-            return institution;
-          }
-        })
-      };
-
-      findInstitution();
-
-
-      let quantity = document.getElementById("id_quantity").value;
-      let street = document.getElementById("id_address").value;
-      let zip_code = document.getElementById("id_zip_code").value;
-      let city = document.getElementById("id_city").value;
-      let phone_number = document.getElementById("id_phone_number").value;
-      let pick_up_date = document.getElementById("id_pick_up_date").value;
-      let pick_up_time = document.getElementById("id_pick_up_time").value;
-      let pick_up_comment = document.getElementById("id_pick_up_comment").value;
-
-      summary.firstElementChild.querySelector('.summary--text').innerText = quantity + ' x worek';
-      summary.children[1].querySelector('.summary--text').innerText = institution;
-      address[0].innerText = street;
-      address[1].innerText = city;
-      address[2].innerText = zip_code;
-      address[3].innerText = phone_number;
-      date.children[0].innerText = pick_up_date;
-      date.children[1].innerText = pick_up_time;
-      date.children[2].innerText = pick_up_comment;
+      // if (this.currentStep === 5) {
+      //   let summary = this.$form.querySelector("form").querySelector(".summary").querySelector("ul");
+      //   let address = this.$form.querySelector("form").querySelector(".summary").querySelector(".form-section--columns").querySelector("ul").children;
+      //   let date = this.$form.querySelector("form").querySelector(".summary").querySelector(".form-section--columns").children[1].children[1];
+      //   // let institution = ''
+      //   //
+      //   // const institutions = document.getElementById("id_institution").children;
+      //   // const findInstitution = function () {
+      //   //   institutions.forEach(function (li) {
+      //   //     if (li.querySelector('input').checked) {
+      //   //       institution = li.querySelector('input').value;
+      //   //       return institution;
+      //   //     }
+      //   //   })
+      //   // };
+      //   //
+      //   // findInstitution();
+      //
+      //
+      //   let quantity = document.getElementById("id_quantity").value;
+      //   let street = document.getElementById("id_address").value;
+      //   let zip_code = document.getElementById("id_zip_code").value;
+      //   let city = document.getElementById("id_city").value;
+      //   let phone_number = document.getElementById("id_phone_number").value;
+      //   let pick_up_date = document.getElementById("id_pick_up_date").value;
+      //   let pick_up_time = document.getElementById("id_pick_up_time").value;
+      //   let pick_up_comment = document.getElementById("id_pick_up_comment").value;
+      //
+      //   summary.firstElementChild.querySelector('.summary--text').innerText = quantity + ' x worek';
+      //   // summary.children[1].querySelector('.summary--text').innerText = institution;
+      //   address[0].innerText = street;
+      //   address[1].innerText = city;
+      //   address[2].innerText = zip_code;
+      //   address[3].innerText = phone_number;
+      //   date.children[0].innerText = pick_up_date;
+      //   date.children[1].innerText = pick_up_time;
+      //   date.children[2].innerText = pick_up_comment;
+      //
+      // }
 
     }
 
@@ -283,19 +287,19 @@ document.addEventListener("DOMContentLoaded", function() {
       this.currentStep++;
       this.updateForm();
 
-      return fetch(
-        'http://localhost:8080' + '/confirmation',
-        {
-            headers: {'Content-Type': 'application/json' },
-            body: JSON.stringify(this.$form.formData),
-            method: 'POST'
-        }
-    ).then(
-        function(resp) {
-
-            return resp.json();
-        }
-    )
+    //   return fetch(
+    //     'http://localhost:8080' + '/confirmation',
+    //     {
+    //         headers: {'Content-Type': 'application/json' },
+    //         body: JSON.stringify(this.$form.formData),
+    //         method: 'POST'
+    //     }
+    // ).then(
+    //     function(resp) {
+    //
+    //         return resp.json();
+    //     }
+    // )
 }
     }
   const form = document.querySelector(".form--steps");

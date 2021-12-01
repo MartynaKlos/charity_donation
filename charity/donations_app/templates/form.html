@@ -59,9 +59,19 @@
           <!-- STEP 1: class .active is switching steps -->
           <div data-step="1" class="active">
             <h3>Zaznacz co chcesz oddać:</h3>
-              <div>
-              {{ form.categories }}
+              {% for choice in form.fields.categories.choices %}
+              <div class="form-group form-group--checkbox">
+              <label>
+                <input
+                  type="checkbox"
+                  name="{{ form.categories.name }}"
+                  value="{{ choice.0 }}"/>
+                <span class="checkbox"></span>
+                <span class="description">{{ choice.1 }}</span>
+              </label>
               </div>
+              {% endfor %}
+
         <div class="form-group form-group--buttons">
               <button type="button" class="btn next-step">Dalej</button>
             </div>
@@ -89,7 +99,21 @@
           <!-- STEP 4 -->
           <div data-step="3">
             <h3>Wybierz organizacje, której chcesz pomóc:</h3>
-              {{ form.institution }}
+                {% for choice in form.fields.institution.queryset %}
+                <div class="form-group form-group--checkbox">
+              <label>
+                <input type="radio" name="organization" value="{{ choice.pk }}" />
+                <span class="checkbox radio"></span>
+                <span class="description">
+                  <div class="title">{{ choice.name }}</div>
+                  <div class="subtitle">
+                    Cel i misja: {{ choice.description }}
+                  </div>
+                </span>
+              </label>
+            </div>
+            {% endfor %}
+
             <div class="form-group form-group--buttons">
               <button type="button" class="btn prev-step">Wstecz</button>
               <button type="button" class="btn next-step">Dalej</button>

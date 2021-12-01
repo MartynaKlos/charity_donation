@@ -1,8 +1,7 @@
 from django import forms
-from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
 from django.forms import widgets
-from django.forms.models import ModelMultipleChoiceField, BaseModelForm
+from django.forms.models import BaseModelForm
 
 from .models import Category, Institution, User
 
@@ -36,7 +35,7 @@ class LoginForm(forms.Form):
 class DonationForm(forms.Form):
     categories = forms.ModelMultipleChoiceField(Category.objects.all(), widget=widgets.CheckboxSelectMultiple())
     quantity = forms.IntegerField()
-    institution = forms.ModelChoiceField(Institution.objects.all(), widget=widgets.RadioSelect())
+    institution = forms.ModelChoiceField(queryset=Institution.objects.all(), widget=widgets.RadioSelect())
     address = forms.CharField()
     phone_number = forms.IntegerField()
     city = forms.CharField(max_length=120)
