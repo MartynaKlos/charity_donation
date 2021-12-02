@@ -1,9 +1,9 @@
 import json
-
 from django.contrib.auth import get_user_model, login, logout
 from django.shortcuts import render, redirect
+from django.views import View
 from django.views.generic import FormView, TemplateView, RedirectView, DetailView
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 
 from .forms import RegisterForm, LoginForm, DonationForm
 from .models import Donation, Institution, Category
@@ -27,7 +27,7 @@ class LandingPage(TemplateView):
 class AddDonation(FormView):
     template_name = 'form.html'
     form_class = DonationForm
-    success_url = reverse_lazy('confirmation-page')
+    success_url = '/confirmation/'
 
     def get(self, request, *args, **kwargs):
         if self.request.user.is_authenticated:
@@ -37,11 +37,12 @@ class AddDonation(FormView):
             return redirect('login')
 
 
-class ConfirmationPage(TemplateView):
+class ConfirmationPage(View):
     template_name = 'form-confirmation.html'
 
-    def get(self, request, *args, **kwargs):
-        form_data = json.loads(request.body.decode("utf-8"))
+    def post(self, request, *args, **kwargs):
+        form_data = json.loads(request.body)
+
         return render(request, self.template_name, {'form_data': form_data})
 
 
