@@ -65,7 +65,7 @@
                 <input
                   type="checkbox"
                   name="{{ form.categories.name }}"
-                  value="{{ choice.0 }}"/>
+                  value="{{ choice.1 }}"/>
                 <span class="checkbox"></span>
                 <span class="description">{{ choice.1 }}</span>
               </label>
@@ -102,7 +102,7 @@
                 {% for choice in form.fields.institution.queryset %}
                 <div class="form-group form-group--checkbox">
               <label>
-                <input type="radio" name="organization" value="{{ choice.pk }}" />
+                <input type="radio" name="organization" value="{{ choice.name }}" />
                 <span class="checkbox radio"></span>
                 <span class="description">
                   <div class="title">{{ choice.name }}</div>

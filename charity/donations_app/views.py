@@ -1,12 +1,11 @@
-import json
 from django.contrib.auth import get_user_model, login, logout
 from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic import FormView, TemplateView, RedirectView, DetailView
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse_lazy
 
 from .forms import RegisterForm, LoginForm, DonationForm
-from .models import Donation, Institution, Category
+from .models import Donation, Institution
 
 User = get_user_model()
 
@@ -37,12 +36,11 @@ class AddDonation(FormView):
             return redirect('login')
 
 
-class ConfirmationPage(View):
+class ConfirmationPage(FormView):
     template_name = 'form-confirmation.html'
 
     def post(self, request, *args, **kwargs):
-        form_data = json.loads(request.body)
-
+        form_data = request.POST['categories']
         return render(request, self.template_name, {'form_data': form_data})
 
 
