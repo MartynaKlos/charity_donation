@@ -211,7 +211,7 @@ document.addEventListener("DOMContentLoaded", function() {
       });
 
       // Form submit
-      this.$form.addEventListener("submit", e => this.$form.submit(e));
+      this.$form.addEventListener("submit", e => this.$form.submit);
     }
 
     /**

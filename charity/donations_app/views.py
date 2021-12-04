@@ -5,7 +5,7 @@ from django.views.generic import FormView, TemplateView, RedirectView, DetailVie
 from django.urls import reverse_lazy
 
 from .forms import RegisterForm, LoginForm, DonationForm
-from .models import Donation, Institution
+from .models import Donation, Institution, Category
 
 User = get_user_model()
 
@@ -38,10 +38,28 @@ class AddDonation(FormView):
 
 class ConfirmationPage(FormView):
     template_name = 'form-confirmation.html'
+    form_class = DonationForm
+    success_url = reverse_lazy('confirmation-page')
 
     def post(self, request, *args, **kwargs):
-        form_data = request.POST['categories']
-        return render(request, self.template_name, {'form_data': form_data})
+        cd = request.POST
+        breakpoint()
+        institution = Institution.objects.get(name=cd['organization'])
+        donation = Donation.objects.create(quantity=int(cd['quantity']),
+                                           institution=institution,
+                                           address=cd['address'],
+                                           phone_number=cd['phone_number'],
+                                           city=cd['city'],
+                                           zip_code=cd['zip_code'],
+                                           pick_up_date=cd['pick_up_date'],
+                                           pick_up_time=cd['pick_up_time'],
+                                           pick_up_comment=cd['pick_up_comment'],
+                                           user=request.user)
+        for category in cd.getlist('categories'):
+            cat = Category.objects.get(name=category)
+            donation.categories.add(cat)
+        donation.save()
+        return render(request, 'form-confirmation.html')
 
 
 class Login(FormView):
