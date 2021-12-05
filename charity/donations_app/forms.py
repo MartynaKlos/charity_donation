@@ -2,8 +2,24 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.forms import widgets
 from django.forms.models import BaseModelForm
+from django.utils import timezone
 
 from .models import Category, Institution, User
+
+
+def validate_pick_up(value):
+    if value < timezone.now():
+        raise ValidationError(f"Wybierz poprawną datę odbioru!")
+
+
+def validate_phone_number(value):
+    if len(str(value)) not in (6, 8):
+        raise ValidationError(f"Wprowadź poprawny numer telefonu!")
+
+
+def validate_post_code(value):
+    if len(value) != 6 or value[2] != '-':
+        raise ValidationError(f"Wprowadź poprawny kod pocztowy!")
 
 
 class RegisterForm(forms.Form):
@@ -37,11 +53,11 @@ class DonationForm(forms.Form):
     quantity = forms.IntegerField()
     institution = forms.ModelChoiceField(queryset=Institution.objects.all(), widget=widgets.RadioSelect())
     address = forms.CharField()
-    phone_number = forms.IntegerField()
+    phone_number = forms.IntegerField(validators=[validate_phone_number])
     city = forms.CharField(max_length=120)
     zip_code = forms.CharField()
-    pick_up_date = forms.DateField(widget=widgets.DateInput(attrs={'type': 'date'}))
+    pick_up_date = forms.DateField(validators=[validate_pick_up], widget=widgets.DateInput(attrs={'type': 'date'}))
     pick_up_time = forms.TimeField(widget=widgets.TimeInput(attrs={'type': 'time'}))
-    pick_up_comment = forms.CharField(widget=widgets.Textarea())
+    pick_up_comment = forms.CharField(required=False, widget=widgets.Textarea())
 
 

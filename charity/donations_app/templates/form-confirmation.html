@@ -7,7 +7,7 @@
           <br><br>
           <h2>
             Dziękujemy za przesłanie formularza. <br><br> Na maila prześlemy wszelkie
-            informacje o odbiorze.
+            informacje o odbiorze. {% if message %} <br><br> {{ message }} {% endif  %}
           </h2>
             <p>{{ form_data }}</p>
       </div>

@@ -36,15 +36,24 @@ class AddDonation(FormView):
             return redirect('login')
 
 
-class ConfirmationPage(FormView):
+class ConfirmationPage(TemplateView):
     template_name = 'form-confirmation.html'
-    form_class = DonationForm
     success_url = reverse_lazy('confirmation-page')
+    form_class = DonationForm
 
     def post(self, request, *args, **kwargs):
         cd = request.POST
-        breakpoint()
         institution = Institution.objects.get(name=cd['organization'])
+        institution_categories = [pk for t in institution.category.all().values_list('pk') for pk in t]
+        categories_pk = [Category.objects.get(name=category).pk for category in cd.getlist('categories')]
+
+        if not any(pk in categories_pk for pk in institution_categories):
+            context = {
+                'form': self.form_class,
+                'message': "Żaden z Twoich darów nie jest akceptowany przez wybraną organizację, wybierz inną."
+            }
+            return render(request, 'form.html', context)
+
         donation = Donation.objects.create(quantity=int(cd['quantity']),
                                            institution=institution,
                                            address=cd['address'],
@@ -55,11 +64,14 @@ class ConfirmationPage(FormView):
                                            pick_up_time=cd['pick_up_time'],
                                            pick_up_comment=cd['pick_up_comment'],
                                            user=request.user)
+
         for category in cd.getlist('categories'):
             cat = Category.objects.get(name=category)
+            if cat.pk not in institution_categories:
+                context = {'message': f"Kategoria darów: {cat.name} nie jest przyjmowana przez wybraną organizację. Zapisaliśmy te kategorie, które są akceptowane."}
             donation.categories.add(cat)
         donation.save()
-        return render(request, 'form-confirmation.html')
+        return render(request, 'form-confirmation.html', context)
 
 
 class Login(FormView):

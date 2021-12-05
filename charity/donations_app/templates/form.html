@@ -2,6 +2,12 @@
 {% load static %}
 {% block header %}header--form-page{% endblock %}
 {% block instruction %}
+
+{% if message %}
+<div class="slogan container">
+    <h1>{{ message }}</h1>
+</div>
+{% else %}
 <div class="slogan container container--90">
         <div class="slogan--item">
           <h1>
@@ -28,6 +34,7 @@
           </div>
         </div>
       </div>
+{% endif %}
 {% endblock %}
 {% block content %}
 
